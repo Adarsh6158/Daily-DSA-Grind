@@ -1,0 +1,118 @@
+## 📌 Problem Statement
+
+Given an array of meeting time intervals `intervals` where `intervals[i] = [start_i, end_i]`, determine if a person can attend all meetings.
+
+A person can attend all meetings if none of the intervals overlap.
+
+LeetCode Link: [https://leetcode.com/problems/meeting-rooms/](https://leetcode.com/problems/meeting-rooms/)
+
+
+## Examples
+
+### Example 1
+
+* **Input:** `intervals = [[0,30],[5,10],[15,20]]`
+* **Output:** `false`
+* **Explanation:** `[0,30]` overlaps with `[5,10]`
+
+
+### Example 2
+
+* **Input:** `intervals = [[7,10],[2,4]]`
+* **Output:** `true`
+* **Explanation:** No overlapping intervals
+
+## Constraints
+
+* `0 <= intervals.length <= 10^4`
+* `intervals[i].length == 2`
+* `0 <= start_i < end_i <= 10^6`
+
+
+# Approaches
+
+## 1. Brute Force
+
+### Idea
+
+* Compare every interval with every other interval
+* If any two intervals overlap, return false
+
+
+### Time Complexity
+
+* `O(n^2)`
+
+### Space Complexity
+
+* `O(1)`
+
+
+### Code (Java)
+
+```java
+public class Solution {
+    public boolean canAttendMeetings(int[][] intervals) {
+        int n = intervals.length;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (overlap(intervals[i], intervals[j])) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    private boolean overlap(int[] a, int[] b) {
+        return Math.max(a[0], b[0]) < Math.min(a[1], b[1]);
+    }
+}
+```
+
+
+## 2. Sorting (Optimal)
+
+### Idea
+
+* Sort intervals based on start time
+* Compare adjacent intervals
+* If current start < previous end, return false
+
+
+### Time Complexity
+
+* `O(n log n)`
+
+### Space Complexity
+
+* `O(1)`
+
+
+### Code (Java)
+
+```java
+import java.util.Arrays;
+
+public class Solution {
+    public boolean canAttendMeetings(int[][] intervals) {
+        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+
+        for (int i = 1; i < intervals.length; i++) {
+            if (intervals[i][0] < intervals[i - 1][1]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+```
+
+
+## Conclusion
+
+| Approach    | Time Complexity | Space Complexity | Notes            |
+| ----------- | --------------- | ---------------- | ---------------- |
+| Brute Force | O(n^2)          | O(1)             | Not efficient    |
+| Sorting     | O(n log n)      | O(1)             | Optimal solution |
